@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{85DCDDFB-A717-4446-9EAE-578487E48EAF}") = "RT-4D-SPIFlash-CLI", "RT-4D-SPIFlash-CLI.csproj", "{CAA7CF9F-8302-4358-B356-9D3E3F6E9DEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAA7CF9F-8302-4358-B356-9D3E3F6E9DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA7CF9F-8302-4358-B356-9D3E3F6E9DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA7CF9F-8302-4358-B356-9D3E3F6E9DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA7CF9F-8302-4358-B356-9D3E3F6E9DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B378DABD-CE6D-4DEC-8CDF-3B7E2F031EA6}
+	EndGlobalSection
+EndGlobal
