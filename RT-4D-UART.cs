@@ -71,11 +71,7 @@ public class RT_4D_UART {
 
 	public bool Command_Close()
 	{
-		byte[] Command = new byte[5];
-
-		Command[0] = 0x34;
-		Command[3] = 0xEE;
-		Checksum(Command);
+		byte[] Command = new byte[5] { 0x34, 0x52, 0x05, 0xEE, 0x79 };
 
 		try {
 			Port.Write(Command, 0, Command.Length);
@@ -151,7 +147,7 @@ public class RT_4D_UART {
 		Port.Parity = Parity.None;
 		Port.StopBits = StopBits.One;
 		Port.DataBits = 8;
-		Port.ReadTimeout = 2000;
+		Port.ReadTimeout = 10000;
 		Port.WriteTimeout = 2000;
 		Port.Open();
 	}

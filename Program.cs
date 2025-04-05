@@ -1,6 +1,21 @@
-﻿using System;
+﻿/* Copyright 2025 Dual Tachyon
+ * https://github.com/DualTachyon
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ */
+
+using System;
 using System.IO.Ports;
-using System.Runtime.CompilerServices;
 
 namespace RT_4D_SPIFlash_CLI {
 	internal class Program {
@@ -12,6 +27,8 @@ namespace RT_4D_SPIFlash_CLI {
 		};
 
 		static Region_t[] Regions = new Region_t[] {
+			new Region_t { Region = 0x40, Start = 0x000000, Size = 0x001000, Name = "Calibration" },
+
 			new Region_t { Region = 0x90, Start = 0x002000, Size = 0x001000, Name = "Main settings" },
 			new Region_t { Region = 0x91, Start = 0x004000, Size = 0x00C000, Name = "Channels" },
 			new Region_t { Region = 0x92, Start = 0x01C000, Size = 0x020000, Name = "Zones" },
@@ -31,30 +48,40 @@ namespace RT_4D_SPIFlash_CLI {
 			Exe = Exe.Trim();
 			Console.WriteLine("Usage:");
 			Console.WriteLine("\t" + Exe + " -l                        List available COM ports");
+			Console.WriteLine("\t" + Exe + " -i                        List of regions that can be restored");
 			Console.WriteLine("\t" + Exe + " -p COMx -r spi.bin        Backup SPI flash");
 			Console.WriteLine("\t" + Exe + " -p COMx -w spi.bin        Restore SPI flash");
+			Console.WriteLine("\t" + Exe + " -p COMx -w spi.bin -i X   Restore only region X to SPI flash");
 		}
 
 		static void Main(string[] args)
 		{
 			byte[] Spi = null;
 			System.IO.FileStream F = null;
+			byte RegionIndex = 0xFF;
 
 			Console.WriteLine("RT-4D-SPIFlash-CLI (c) Copyright 2025 Dual Tachyon\n");
 			switch (args.Length) {
 			case 1:
-				if (args[0] != "-l") {
+				if (args[0] == "-l") {
+					var Ports = SerialPort.GetPortNames();
+					Console.Write("Ports available:");
+					foreach (var Port in Ports) {
+						Console.Write(" " + Port);
+					}
+					Console.WriteLine();
+				} else if (args[0] == "-i") {
+					RegionIndex = 0;
+					foreach (var Region in Regions) {
+						Console.WriteLine($"    {RegionIndex:D2} - {Region.Name}");
+						RegionIndex++;
+					}
+				} else {
 					Usage();
-					break;
 				}
-				var Ports = SerialPort.GetPortNames();
-				Console.Write("Ports available:");
-				foreach (var Port in Ports) {
-					Console.Write(" " + Port);
-				}
-				Console.WriteLine();
 				break;
 			case 4:
+			case 6:
 				if (args[0] != "-p") {
 					Usage();
 					break;
@@ -64,6 +91,15 @@ namespace RT_4D_SPIFlash_CLI {
 					break;
 				}
 
+				if (args.Length == 6) {
+					byte R;
+
+					if (args[4] != "-i" || !byte.TryParse(args[5], out R) || R >= Regions.Length) {
+						Usage();
+						break;
+					}
+					RegionIndex = R;
+				}
 				if (args[2] == "-w") {
 					try {
 						Spi = System.IO.File.ReadAllBytes(args[3]);
@@ -109,14 +145,19 @@ namespace RT_4D_SPIFlash_CLI {
 							UInt32 Address = Regions[i].Start;
 							UInt32 Size = Regions[i].Size;
 
+							if (RegionIndex != 0xFF && i != RegionIndex) {
+								continue;
+							}
 							Console.WriteLine("Flashing " + Regions[i].Name + "...");
 							if (!RT.Command_WriteSpi(Spi, Region, Address, Size)) {
-								Console.WriteLine("\rFailed to flash at 0x" + i.ToString("X4") + "!");
+								Console.WriteLine("\rFailed to flash!");
 								Console.Out.Flush();
 								break;
 							}
 						}
-						RT.Command_Close();
+						if (i == Regions.Length) {
+							RT.Command_Close();
+						}
 					} catch (Exception Ex) {
 						Console.WriteLine("\rUnexpected failure writing to SPI flash! Error: ", Ex.Message);
 					}
@@ -141,7 +182,7 @@ namespace RT_4D_SPIFlash_CLI {
 							RT.Command_Close();
 						}
 					} catch (Exception Ex) {
-						Console.WriteLine("\rUnexpected failure writing to flash! Error: ", Ex.Message);
+						Console.WriteLine("\rUnexpected failure reading from SPI flash! Error: ", Ex.Message);
 					}
 				}
 				Console.WriteLine();
