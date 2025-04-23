@@ -50,7 +50,7 @@ namespace RT_4D_SPIFlash_CLI {
 			new Region_t { Region = 0xA1, Start = 0x19E000, Size = 0x0B4000, Name = "Fonts #2" },
 			new Region_t { Region = 0xA2, Start = 0x343000, Size = 0x00F000, Name = "???" },
 			new Region_t { Region = 0xA3, Start = 0x352000, Size = 0x0AE000, Name = "Voices" },
-			new Region_t { Region = 0xA4, Start = 0x400000, Size = 0xC00000, Name = "Address book" },
+			//new Region_t { Region = 0xA4, Start = 0x400000, Size = 0xC00000, Name = "Address book" },
 		};
 
 		static void Usage()
