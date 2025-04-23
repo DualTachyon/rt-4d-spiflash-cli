@@ -39,6 +39,18 @@ namespace RT_4D_SPIFlash_CLI {
 			new Region_t { Region = 0x97, Start = 0x094000, Size = 0x001000, Name = "Default SMS" },
 			new Region_t { Region = 0x98, Start = 0x0C6000, Size = 0x008000, Name = "Schedules" },
 			new Region_t { Region = 0x99, Start = 0x0D6000, Size = 0x001000, Name = "FM settings" },
+
+			new Region_t { Region = 0x9A, Start = 0x100000, Size = 0x001000, Name = "Boot Logo" },
+			new Region_t { Region = 0x9B, Start = 0x126000, Size = 0x001000, Name = "???" },
+			new Region_t { Region = 0x9C, Start = 0x14C000, Size = 0x018000, Name = "UTF16" },
+			new Region_t { Region = 0x9D, Start = 0x164000, Size = 0x024000, Name = "Phonemes" },
+			new Region_t { Region = 0x9E, Start = 0x188000, Size = 0x010000, Name = "???" },
+			new Region_t { Region = 0x9F, Start = 0x198000, Size = 0x004000, Name = "???" },
+			new Region_t { Region = 0xA0, Start = 0x19C000, Size = 0x002000, Name = "Fonts #1" },
+			new Region_t { Region = 0xA1, Start = 0x19E000, Size = 0x0B4000, Name = "Fonts #2" },
+			new Region_t { Region = 0xA2, Start = 0x343000, Size = 0x00F000, Name = "???" },
+			new Region_t { Region = 0xA3, Start = 0x352000, Size = 0x0AE000, Name = "Voices" },
+			new Region_t { Region = 0xA4, Start = 0x400000, Size = 0xC00000, Name = "Address book" },
 		};
 
 		static void Usage()
@@ -48,7 +60,7 @@ namespace RT_4D_SPIFlash_CLI {
 			Exe = Exe.Trim();
 			Console.WriteLine("Usage:");
 			Console.WriteLine("\t" + Exe + " -l                        List available COM ports");
-			Console.WriteLine("\t" + Exe + " -i                        List of regions that can be restored");
+			Console.WriteLine("\t" + Exe + " -i                        List of indices that can be restored");
 			Console.WriteLine("\t" + Exe + " -p COMx -r spi.bin        Backup SPI flash");
 			Console.WriteLine("\t" + Exe + " -p COMx -w spi.bin        Restore SPI flash");
 			Console.WriteLine("\t" + Exe + " -p COMx -w spi.bin -i X   Restore only region X to SPI flash");
