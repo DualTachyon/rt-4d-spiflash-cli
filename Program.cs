@@ -106,7 +106,7 @@ namespace RT_4D_SPIFlash_CLI {
 				if (args.Length == 6) {
 					byte R;
 
-					if (args[4] != "-i" || !byte.TryParse(args[5], out R) || R >= Regions.Length) {
+					if (args[2] != "-w" || args[4] != "-i" || !byte.TryParse(args[5], out R) || R >= Regions.Length) {
 						Usage();
 						break;
 					}
